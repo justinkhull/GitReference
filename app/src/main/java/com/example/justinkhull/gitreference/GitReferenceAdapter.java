@@ -50,10 +50,15 @@ public class GitReferenceAdapter extends BaseAdapter {
         //TextView command = rowView.findViewById(android.R.id.text1);
         TextView example = rowView.findViewById(R.id.example);
         //TextView example = rowView.findViewById(android.R.id.text2);
+        TextView explanation = rowView.findViewById(R.id.explanation);
+        TextView section = rowView.findViewById(R.id.section);
 
         GitReference gitReference = (GitReference) getItem(i);
-        command.setText(gitReference.getCommand());
-        example.setText(gitReference.getExample());
+        command.setText("Command: " + gitReference.getCommand());
+        example.setText("Example: " + gitReference.getExample());
+        explanation.setText("Explanation: " + gitReference.getExplanation());
+        section.setText("Section: " + gitReference.getSection());
+
         return rowView;
     }
 
