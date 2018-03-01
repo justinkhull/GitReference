@@ -54,6 +54,7 @@ public class GitReferenceAdapter extends BaseAdapter {
         TextView section = rowView.findViewById(R.id.section);
 
         GitReference gitReference = (GitReference) getItem(i);
+
         command.setText("Command: " + gitReference.getCommand());
         example.setText("Example: " + gitReference.getExample());
         explanation.setText("Explanation: " + gitReference.getExplanation());

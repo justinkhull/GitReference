@@ -39,16 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        /* what does the next line do? tries to run populateData method on this file? Why can't we just
-        call populateData("gitReference.json")? Because that file is in the assets folder?
 
-        ArrayList<String> listItems = populateData("appGitReference.json");
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
-
-        listView.setAdapter(adapter);
-        */
-
-        //is this pulling from assets folder?
         String logThis = JsonUtils.read(getApplicationContext(), "gitReference.json");
         if (logThis == null) {
             Log.i("LOG_THIS", "NULLLLLLLLL");
@@ -63,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i("JSON", jsonString);
 
 
-        //What is the difference between the next code block and lines 42-68 in JsonUtils.java?
+        
         ArrayList<GitReference>references = JsonUtils.populateGitReferences(jsonString);
 
         for (GitReference g:references) {
