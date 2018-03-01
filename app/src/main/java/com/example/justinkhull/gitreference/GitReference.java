@@ -10,6 +10,15 @@ public class GitReference {
     private String explanation;
     private String section;
 
+    public GitReference () {}
+
+    public GitReference(String command, String example, String explanation, String section) {
+        this.command = command;
+        this.example = example;
+        this.explanation = explanation;
+        this.section = section;
+    }
+
     public String getCommand() {
         return command;
     }
@@ -41,9 +50,4 @@ public class GitReference {
     public void setSection(String section) {
         this.section = section;
     }
-
-    /*public GitReference() {
-
-
-    }*/
 }

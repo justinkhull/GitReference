@@ -3,8 +3,11 @@ package com.example.justinkhull.gitreference;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,20 +19,88 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //listView = findViewById(R.id.git_references);
+        listView = findViewById(R.id.git_references);
 
-        //GitReference gitReference;
+        String json ="";
+        InputStream is;
+        try {
+            is = getApplicationContext().getAssets().open("gitReference.json");
+            json = JsonUtils.parseJsonToString(is);
 
-        //ArrayList<GitReference> gitReferences = new ArrayList<>();
+            Log.i("JSON", json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        //JsonUtils.isFilePresent(getApplicationContext(), "gitReference.json");
+        ArrayList<GitReference> gitReferencesList = JsonUtils.populateGitReferences(json);
+        GitReferenceAdapter adapter = new GitReferenceAdapter(this, gitReferencesList);
+        listView.setAdapter(adapter);
 
+
+
+
+        /* what does the next line do? tries to run populateData method on this file? Why can't we just
+        call populateData("gitReference.json")? Because that file is in the assets folder?
+
+        ArrayList<String> listItems = populateData("appGitReference.json");
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
+
+        listView.setAdapter(adapter);
+        */
+
+        //is this pulling from assets folder?
         String logThis = JsonUtils.read(getApplicationContext(), "gitReference.json");
         if (logThis == null) {
             Log.i("LOG_THIS", "NULLLLLLLLL");
         }
         Log.i("LOG_THIS", logThis);
 
+    }
 
+    public ArrayList<String> populateData(String jsonFileName) {
+        ArrayList<String> returnList = new ArrayList<>();
+        String jsonString = processData(jsonFileName);
+        Log.i("JSON", jsonString);
+
+
+        //What is the difference between the next code block and lines 42-68 in JsonUtils.java?
+        ArrayList<GitReference>references = JsonUtils.populateGitReferences(jsonString);
+
+        for (GitReference g:references) {
+            returnList.add(g.getCommand());
+        }
+        return returnList;
+    }
+
+
+    public String processData(String fileName) {
+        String jsonString = "";
+        boolean isFilePresent = JsonUtils.isFilePresent(this, fileName);
+
+        //if file present, read it
+        if (isFilePresent) {
+            jsonString = JsonUtils.read(this, fileName);
+
+            Log.i("JSON", "JSON was present");
+        }
+        //if it's not present, pull gitReference.json from assets folder and parse json to jsonString variable
+        else {
+            Log.i("JSON", "JSON file not present...creating");
+            InputStream is = null;
+            try {
+                is = getApplicationContext().getAssets().open("gitReference.json");
+            } catch (Exception ex) {
+                //...do something?
+            }
+            jsonString = JsonUtils.parseJsonToString(is);
+            boolean isFileCreated = JsonUtils.create(this, fileName, jsonString);
+
+            if (isFileCreated) {
+                Log.i("JSON", "Created the filesystem JSON");
+            } else {
+                //show the error or try again (perform this whole method again)
+            }
+        }
+        return jsonString;
     }
 }

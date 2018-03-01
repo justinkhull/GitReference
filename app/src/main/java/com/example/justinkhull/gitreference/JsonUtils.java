@@ -55,6 +55,7 @@ public class JsonUtils {
                 JSONObject json_data = jArray.getJSONObject(i);
                 GitReference gitReference = new GitReference();
                 gitReference.setCommand(json_data.getString("command"));
+                gitReference.setExample(json_data.getString("example"));
 
                 Log.i("JSON", "Adding: " + gitReference.getCommand());
                 data.add(gitReference);
@@ -71,6 +72,7 @@ public class JsonUtils {
         String fnf = "FILE_NOT_FOUND";//ADDED TO SEE IF THE FILE WAS EVEN FOUND...IT WASN'T
         try {
             FileInputStream fis = context.openFileInput(fileName); //DOES THIS LOOK FOR THE FILE IN "ASSETS" FOLDER?
+            //InputStream fis = context.getApplicationContext().getAssets().open(fileName);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
